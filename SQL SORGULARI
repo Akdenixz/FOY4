@@ -1,0 +1,82 @@
+SORGU-1
+
+CREATE VIEW salesman_view AS
+SELECT *
+FROM salesman_master
+WHERE tgt_to_get > 200;
+
+--------------------------
+
+SORGU-2
+
+CREATE VIEW product_view AS
+SELECT 
+    product_no AS pro_no,
+    description AS [desc],
+    profit_percent AS profit,
+    unit_measure AS Unit_mea,
+    qty_on_hand
+FROM product_master;
+
+--------------------------
+
+SORGU-3
+
+SELECT [desc]
+FROM product_view
+WHERE qty_on_hand = 10;
+
+--------------------------
+
+SORGU-4
+
+SELECT client_master.name, product_master.description
+FROM sales_order
+RIGHT JOIN sales_order_details ON sales_order.s_order_no = sales_order_details.s_order_no
+LEFT JOIN product_master ON product_master.product_no = sales_order_details.product_no
+LEFT JOIN client_master ON client_master.client_no = sales_order.client_no
+WHERE DATEDIFF(day, s_order_date, CURRENT_TIMESTAMP) > 10;
+
+--------------------------
+
+SORGU-5
+
+CREATE VIEW daily_sales_orders AS
+SELECT *
+FROM sales_order
+WHERE DATEDIFF(day, s_order_date, CURRENT_TIMESTAMP) = 0;
+
+--------------------------
+
+SORGU-6
+
+CREATE TABLE employee_master (
+    employee_id INT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    age INT CHECK (age >= 18),
+    department VARCHAR(30),
+    salary DECIMAL(10, 2) CHECK (salary > 0)
+);
+
+--------------------------
+
+SORGU-7
+
+CREATE TABLE product_masters (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(100),
+    category VARCHAR(50),
+    price DECIMAL(10, 2),
+    stock_quantity INT
+);
+
+CREATE INDEX idx_price ON product_masters(price);
+CREATE INDEX idx_category ON product_masters(category);
+
+SELECT *
+FROM product_masters
+WHERE price > 100;
+SELECT *
+FROM product_masters
+WHERE category = 'Electronics';
